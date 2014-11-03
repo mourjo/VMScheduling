@@ -23,7 +23,7 @@ public class Main {
 
     public static final String WORKLOAD = "planetlab";
 
-    public static boolean doLog = false;
+    public static boolean doLog = true;
 
     private static VmAllocationPolicyFactory policies = new VmAllocationPolicyFactory();
 
@@ -36,7 +36,7 @@ public class Main {
         DatacenterBroker broker = new PowerDatacenterBroker("Broker");
 
         //The applications to run, on their Vms
-        List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), d);
+        List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), WORKLOAD + "/" + d);
         List<Vm> vms = Helper.createVmList(broker.getId(), cloudlets.size());
         broker.submitVmList(vms);
         broker.submitCloudletList(cloudlets);
@@ -78,7 +78,7 @@ public class Main {
             }
             for (File f : input.listFiles()) {
                 System.out.println("Day " + f.getName());
-                Revenue r = simulateDay(f.getPath(), policy);
+                Revenue r = simulateDay(f.getName(), policy);
                 System.out.println(r);
                 revenues.add(r);
             }
@@ -97,13 +97,13 @@ public class Main {
             Log.disable();
             return;
         }
-        File output = new File(d);
+        File output = new File("logs/" + d);
         if (!output.exists()) {
             if (!output.mkdirs()) {
                 quit("Unable to create log folder '" + output + "'");
             }
         }
-        Log.setOutput(new FileOutputStream("logs/ " + d + "/log.txt"));
+        Log.setOutput(new FileOutputStream("logs/" + d + "/log.txt"));
     }
 
     public static void quit(String msg) {
