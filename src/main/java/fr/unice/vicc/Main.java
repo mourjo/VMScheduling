@@ -37,7 +37,7 @@ public class Main {
 
         //The applications to run, on their Vms
         List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), WORKLOAD + "/" + d);
-        List<Vm> vms = Helper.createVmList(broker.getId(), cloudlets.size());
+        List<Vm> vms = Helper.createVmList(broker.getId(), cloudlets);
         broker.submitVmList(vms);
         broker.submitCloudletList(cloudlets);
 

@@ -49,15 +49,16 @@ public class Helper {
 	 * Creates the vm list.
 	 * 
 	 * @param brokerId the broker id
-	 * @param vmsNumber the vms number
 	 * 
 	 * @return the list< vm>
 	 */
-	public static List<Vm> createVmList(int brokerId, int vmsNumber) {
-		List<Vm> vms = new ArrayList<Vm>();
+	public static List<Vm> createVmList(int brokerId, List<Cloudlet> cloudlets) {
+        int vmsNumber = cloudlets.size();
+		List<Vm> vms = new ArrayList<Vm>(vmsNumber);
 		for (int i = 0; i < vmsNumber; i++) {
+            int uId = cloudlets.get(i).getUserId();
 			int vmType = i / (int) Math.ceil((double) vmsNumber / VM_TYPES);
-			vms.add(new PowerVm(i,brokerId,VM_MIPS[vmType],VM_PES[vmType],VM_RAM[vmType],VM_BW,VM_SIZE,1,"Xen",
+			vms.add(new PowerVm(i,uId,VM_MIPS[vmType],VM_PES[vmType],VM_RAM[vmType],VM_BW,VM_SIZE,1,"Xen",
 					new CloudletSchedulerDynamicWorkload(VM_MIPS[vmType], VM_PES[vmType]),
 					Constants.SCHEDULING_INTERVAL));
 		}
@@ -443,6 +444,8 @@ public class Helper {
         for (int i = 0; i < files.length; i++) {
             Cloudlet cloudlet = null;
             try {
+                String name = files[i].getName();
+                int uid = name.substring(0, name.indexOf('_')).hashCode();
                 cloudlet = new Cloudlet(
                         i,
                         Constants.CLOUDLET_LENGTH,
@@ -452,6 +455,7 @@ public class Helper {
                         new UtilizationModelPlanetLabInMemory(
                                 files[i].getAbsolutePath(),
                                 Constants.SCHEDULING_INTERVAL), utilizationModelNull, utilizationModelNull);
+                cloudlet.setUserId(uid);
             } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(0);
