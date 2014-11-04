@@ -8,10 +8,14 @@ import org.cloudbus.cloudsim.power.PowerHost;
 import java.util.List;
 
 /**
+ * A component connected to the simulator.
+
+ * Regularly, the component is called to check the instantaneous power consumption of the datacenter.
  * @author Fabien Hermenier
  */
 public class PeakPowerObserver extends SimEntity {
 
+    /** The event id, must be unique. */
     public static final int OBSERVE = 728078;
 
     private List<PowerHost> hosts;
@@ -33,6 +37,10 @@ public class PeakPowerObserver extends SimEntity {
     }
 
 
+    /**
+     * Get the datacenter instantaneous power.
+     * @return a number in Watts
+     */
     private double getPower() {
         double p = 0;
         for (PowerHost h : hosts) {
@@ -43,16 +51,23 @@ public class PeakPowerObserver extends SimEntity {
 
     @Override
     public void processEvent(SimEvent ev) {
+        //I received an event
         switch(ev.getTag()) {
             case OBSERVE:
+                //I must observe the datacenter
                 double cur = getPower();
                 if (cur > peak) {
                     peak = cur;
                 }
+                //Observation loop, re-observe in `delay` seconds
                 send(this.getId(), delay, OBSERVE, null);
         }
     }
 
+    /**
+     * Get the peak power consumption.
+     * @return a number of Watts
+     */
     public double getPeak() {
         return peak;
     }
@@ -65,7 +80,8 @@ public class PeakPowerObserver extends SimEntity {
     @Override
     public void startEntity() {
         Log.printLine(getName() + " is starting...");
-        //Send the signal to create the VMs
+        //I send to myself an event that will be processed in `delay` second by the method
+        //`processEvent`
         send(this.getId(), delay, OBSERVE, null);
     }
 

@@ -56,4 +56,17 @@ The (FAQ) indicates you have to extend `VmAllocationPolicy`. This class allows t
 
 At this level, it is ok to have penalties due to SLA violations
 	
+### Support for Highly-Available applications
+
+Let consider the VMs run replicated applications. To make them fault-tolerant to hardware failure, the customer expects to have the replicas running on distinct hosts.
+
+1. Implement a new VM Scheduler (flag `antiAffinity`) that place VMs with regards to their affinity. In practice, all Vms with an id between [0-100] must be on distinct nodes, the same with VMs having an id between [101-200], [201-300], ... ,[1501, 1530].
+
+2. To check the scheduler is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to confirm VMs of the same group are all hosted on distinct nodes
+
+### Get rid of SLA violations
+
+For a practical understanding of what a SLA violation is here, look at the `Revenue` class. Basically, there is a SLA violation when the Vm is requiring more MIPS it can get on its node.
+
+If the SLA is not met then the provider must pay penalties to the client. It is then not desirable to have violation as it reduces the provider revenues.
 
