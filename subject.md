@@ -2,9 +2,13 @@
 
 This project aims at developing different VM schedulers for a given IaaS cloud. Each schedule will have meaningful properties for either the cloud customers or the cloud provider.
 
-The implementation and the evaluation will be made over the IaaS cloud simulator (CloudSim) [http://www.cloudbus.org/cloudsim/] using real workload and a datacenter with realistic characteristics.
+The implementation and the evaluation will be made over the IaaS cloud simulator (CloudSim) [http://www.cloudbus.org/cloudsim/] using real workload and a datacenter with realistic characteristics. 
 
-This project is individual and will be evaluated accordingly. 
+Some usefull resources:
+
+- CloudSim (FAQ)[https://code.google.com/p/cloudsim/wiki/FAQ#Policies_and_algorithms]
+- CloudSim (API)[http://www.cloudbus.org/cloudsim/doc/api/index.html]
+- CloudSim source code ...
 
 ## Setting up the environment
 
@@ -21,11 +25,27 @@ You must have a working Java 7 + maven environment to code and Git to manage the
 3. Integrate the project with your IDE if needed
 
 
-## Usefull resources:
+## How to send your project
 
-- CloudSim (FAQ)[https://code.google.com/p/cloudsim/wiki/FAQ#Policies_and_algorithms]
-- CloudSim (API)[http://www.cloudbus.org/cloudsim/doc/api/index.html]
-- CloudSim source code ...
+- GitHub provides education discount for student, so you can have free private repositories. If so, give to me the access to your repository and I will checkout the master branch at the deadline
+
+- if you don't have a private repository, send me a diff against the master branch of this repository.
+
+You may use a public repository if you want but you will be responsible in case of suspect similarities between other projects and yours.
+
+## Evaluation criteria
+
+- quality of each scheduler
+- quality of each observer
+- code clarity
+- the justification for each scheduling algorithm, especially the energy-aware ones.
+
+Furthermore, bonus points will be granted to the 3 projects having
+
+- the energy-aware static schedulers providing the highest savings
+- the energy-aware dynamic schedulers providing the highest savings
+- the energy-aware schedulers (static or dynamic) leading to the highest revenues.
+
 
 ## Exercices
 
@@ -85,11 +105,11 @@ Balancing the load is usefull to avoid to alter specific nodes prematurely. It i
 
 ### Statically improve the datacenter energy efficiency
 
-Develop a scheduling algorithm (`energy1` flag) that reduced the overall energy consumption
+Develop a scheduling algorithm (`statEnergy` flag) that reduced the overall energy consumption
 
 ### Dynamically improve the datacenter energy efficiency
 
-Copy the previous scheduler and improve it to improve the scheduling over the time. This can be achieved using VM migrations. To do so, you must implement `optimizeAllocation` to indicate where to relocate the Vms.
+Copy the previous scheduler and improve it to improve the scheduling over the time (`dynEnergy` flag). This can be achieved using VM migrations. To do so, you must implement `optimizeAllocation` to indicate where to relocate the Vms.
 
 The first objective is then to develop an algorithm that reduces the energy consumption with regards to the static version. 
 
