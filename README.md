@@ -25,14 +25,6 @@ You must have a working Java 7 + maven environment to code and Git to manage the
 3. Integrate the project with your IDE if needed
 
 
-## How to send your project
-
-- GitHub provides education discount for student, so you can have free private repositories. If so, give to me the access to your repository and I will checkout the master branch at the deadline
-
-- if you don't have a private repository, send me a diff against the master branch of this repository.
-
-- You may use a public repository if you want but you will be responsible in case of suspect similarities between other projects and yours.
-
 ## Exercices
 
 For this project, you will have to develop various VM schedulers (`VmAllocationPolicy` in CloudSim terminology) and a few observers that check if your schedulers behave correctly.
@@ -100,18 +92,3 @@ Copy the previous scheduler and modify to rely on Vm migration to continuously i
 
 1. Develop a first version that only saves more energy than the static version
 2. Develop an advanced version that maximize the revenues. It is then important to provide a good mix between energy savings and penalties for SLA violation
-
-## Evaluation criteria
-
-- quality of each scheduler
-- quality of each observer
-- code clarity
-- the justification for each scheduling algorithm (_why such an algorithm ?_), especially the energy-aware ones.
-
-Furthermore, bonus points will be granted to the 3 projects having
-
-- the energy-aware static schedulers providing the highest savings
-- the energy-aware dynamic schedulers providing the highest savings
-- the energy-aware schedulers (static or dynamic) leading to the highest revenues.
-
-
