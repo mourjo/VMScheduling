@@ -68,5 +68,34 @@ Let consider the VMs run replicated applications. To make them fault-tolerant to
 
 For a practical understanding of what a SLA violation is here, look at the `Revenue` class. Basically, there is a SLA violation when the Vm is requiring more MIPS it can get on its node.
 
-If the SLA is not met then the provider must pay penalties to the client. It is then not desirable to have violation as it reduces the provider revenues.
+If the SLA is not met then the provider must pay penalties to the client. It is then not desirable to have violations as it reduces the provider revenues.
+
+Develop a scheduler that ensures their is no SLA violation (`noViolations` flag).
+Practically, the scheduler must ensure chosen hosts will have at any moment 1 free processing unit (Pes in CloudSim terminology) with enough MIPS capacity to support the peak demand in terms of mips (`Vm.getMips()`) for all the Vms they host.
+
+Your scheduler is effective when you can succesfully simulates all the days, with the `Revenue` class reporting no refundings.
+
+### Balance the load
+
+Balancing the load is usefull to avoid to alter specific nodes prematurely. It is also convenient to minimize the probabilities of saturating a node.
+
+1. Develop a scheduler that perform load balacing (`balance` load) and ensures their is no SLA violation
+2. Develop an observer to evaluate every second the balancing rate 
+
+
+### Statically improve the datacenter energy efficiency
+
+Develop a scheduling algorithm (`energy1` flag) that reduced the overall energy consumption
+
+### Dynamically improve the datacenter energy efficiency
+
+Copy the previous scheduler and improve it to improve the scheduling over the time. This can be achieved using VM migrations. To do so, you must implement `optimizeAllocation` to indicate where to relocate the Vms.
+
+The first objective is then to develop an algorithm that reduces the energy consumption with regards to the static version. 
+
+A more advanced version will be also to have less SLAs violations or to have penalties that do not exceed the gain of reducing the energy cost. Basically, you focus on maximizing the revenues.
+
+
+
+
 
