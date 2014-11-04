@@ -29,6 +29,10 @@ public class Main {
 
     private static Revenue simulateDay(String d, String impl) throws Exception {
 
+        File input = new File(WORKLOAD + "/" +  d);
+        if (!input.isDirectory()){
+            quit("no workload for day " + d);
+        }
         //Initialise the simulator
         CloudSim.init(1, Calendar.getInstance(), false);
 
@@ -36,7 +40,7 @@ public class Main {
         DatacenterBroker broker = new PowerDatacenterBroker("Broker");
 
         //The applications to run, on their Vms
-        List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), WORKLOAD + "/" + d);
+        List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), input.getName());
         List<Vm> vms = Helper.createVmList(broker.getId(), cloudlets);
         broker.submitVmList(vms);
         broker.submitCloudletList(cloudlets);
@@ -66,11 +70,11 @@ public class Main {
     public static void main(String [] args) throws Exception {
         CumulatedRevenue revenues = new CumulatedRevenue();
         if (args.length < 1) {
-            quit("Usage: Main scheduler [day]");
+            quit("Usage: Main --scheduler [day]");
         }
         String policy = args[0].substring(2);  //get rid of the leading "--"
 
-        if (args.length == 1) {
+        if (args.length == 1 || args[1].equals("all")) {
             //we process every day
             File input = new File(WORKLOAD);
             if (!input.isDirectory()) {

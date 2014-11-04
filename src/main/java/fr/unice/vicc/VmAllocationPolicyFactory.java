@@ -1,6 +1,7 @@
 package fr.unice.vicc;
 
 import org.cloudbus.cloudsim.VmAllocationPolicy;
+import org.cloudbus.cloudsim.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.power.PowerHost;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class VmAllocationPolicyFactory {
 
     VmAllocationPolicy make(String id, List<PowerHost> hosts) {
         switch (id) {
-            case "naive": /* return new NaiveVmAllocationPolicy(hosts)*/;
+            case "naive": return new VmAllocationPolicySimple(hosts);/* return new NaiveVmAllocationPolicy(hosts)*/
         }
         throw new IllegalArgumentException("No such policy '" + id + "'");
     }

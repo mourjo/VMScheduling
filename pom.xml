@@ -18,7 +18,8 @@
     </dependencies>
 
     <properties>
-        <args></args>
+        <sched></sched>
+        <day></day>
     </properties>
 
     <build>
@@ -46,7 +47,8 @@
             <configuration>
                 <mainClass>fr.unice.vicc.Main</mainClass>
                 <arguments>
-                    <argument>${args}</argument>
+                    <argument>--${sched}</argument>
+                    <argument>${day}</argument>
                 </arguments>
             </configuration>
         </plugin>
