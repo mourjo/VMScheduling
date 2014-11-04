@@ -58,9 +58,9 @@ At this level, it is ok to have penalties due to SLA violations
 
 Let consider the VMs run replicated applications. To make them fault-tolerant to hardware failure, the customer expects to have the replicas running on distinct hosts.
 
-1. Implement a new VM Scheduler (flag `antiAffinity`) that place VMs with regards to their affinity. In practice, all Vms with an id between [0-100] must be on distinct nodes, the same with VMs having an id between [101-200], [201-300], ... ,[1501, 1530].
+1. Implement a new VM Scheduler (flag `antiAffinity`) that place VMs with regards to their affinity. In practice, all Vms with an id between [0-100] must be on distinct nodes, the same with VMs having an id between [101-200], [201-300], ... .
 
-2. To check the scheduler is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to confirm VMs of the same group are all hosted on distinct nodes
+2. To check the scheduler is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to confirm VMs of a same group are all hosted on distinct nodes or to indicate which of the Vms are co-located despite the constraint.  
 
 ### Get rid of SLA violations
 
@@ -78,7 +78,7 @@ Your scheduler is effective when you can succesfully simulates all the days, wit
 Balancing the load is usefull to avoid to alter specific nodes prematurely. It is also convenient to minimize the probabilities of saturating a node.
 
 1. Develop a scheduler that perform load balacing (`balance` load) and ensures their is no SLA violation
-2. Develop an observer to evaluate every second the balancing rate 
+2. Develop an observer to evaluate every second the balancing rate. The observer must output the balancing rate 
 
 ### Energy-efficient algorithm
 
