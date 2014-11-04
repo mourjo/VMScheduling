@@ -2,12 +2,12 @@
 
 This project aims at developing different VM schedulers for a given IaaS cloud. Each schedule will have meaningful properties for either the cloud customers or the cloud provider.
 
-The implementation and the evaluation will be made over the IaaS cloud simulator (CloudSim) [http://www.cloudbus.org/cloudsim/] using real workload and a datacenter with realistic characteristics. 
+The implementation and the evaluation will be made over the IaaS cloud simulator [CloudSim](http://www.cloudbus.org/cloudsim/) using real workload and a datacenter with realistic characteristics. 
 
 Some usefull resources:
 
-- CloudSim (FAQ)[https://code.google.com/p/cloudsim/wiki/FAQ#Policies_and_algorithms]
-- CloudSim (API)[http://www.cloudbus.org/cloudsim/doc/api/index.html]
+- CloudSim [FAQ](https://code.google.com/p/cloudsim/wiki/FAQ#Policies_and_algorithms)
+- CloudSim [API](http://www.cloudbus.org/cloudsim/doc/api/index.html)
 - CloudSim source code ...
 
 ## Setting up the environment
@@ -31,25 +31,11 @@ You must have a working Java 7 + maven environment to code and Git to manage the
 
 - if you don't have a private repository, send me a diff against the master branch of this repository.
 
-You may use a public repository if you want but you will be responsible in case of suspect similarities between other projects and yours.
-
-## Evaluation criteria
-
-- quality of each scheduler
-- quality of each observer
-- code clarity
-- the justification for each scheduling algorithm, especially the energy-aware ones.
-
-Furthermore, bonus points will be granted to the 3 projects having
-
-- the energy-aware static schedulers providing the highest savings
-- the energy-aware dynamic schedulers providing the highest savings
-- the energy-aware schedulers (static or dynamic) leading to the highest revenues.
-
+- You may use a public repository if you want but you will be responsible in case of suspect similarities between other projects and yours.
 
 ## Exercices
 
-For this project, you will have to develop various VM schedulers (_VmAllocationPolicy_ in CloudSim terminology) and a few observers that check if your schedulers behave correctly.
+For this project, you will have to develop various VM schedulers (`VmAllocationPolicy` in CloudSim terminology) and a few observers that check if your schedulers behave correctly.
 
 To integrate your schedulers within the codebase, you will have to declare your schedulers inside the class `VmAllocationPolicyFactory`.
 
@@ -102,20 +88,30 @@ Balancing the load is usefull to avoid to alter specific nodes prematurely. It i
 1. Develop a scheduler that perform load balacing (`balance` load) and ensures their is no SLA violation
 2. Develop an observer to evaluate every second the balancing rate 
 
+### Energy-efficient algorithm
 
-### Statically improve the datacenter energy efficiency
+#### static version
 
-Develop a scheduling algorithm (`statEnergy` flag) that reduced the overall energy consumption
+Develop a scheduling algorithm (`statEnergy` flag) that reduced the overall energy consumption without relying on Vm migration.
 
-### Dynamically improve the datacenter energy efficiency
+#### dynamic version
 
-Copy the previous scheduler and improve it to improve the scheduling over the time (`dynEnergy` flag). This can be achieved using VM migrations. To do so, you must implement `optimizeAllocation` to indicate where to relocate the Vms.
+Copy the previous scheduler and modify to rely on Vm migration to continuously improve the Vm placement (`dynEnergy` flag). This can be achieved using VM migration. To do so, you must implement `optimizeAllocation` to indicate where to relocate the Vms.
 
-The first objective is then to develop an algorithm that reduces the energy consumption with regards to the static version. 
+1. Develop a first version that only saves more energy than the static version
+2. Develop an advanced version that maximize the revenues. It is then important to provide a good mix between energy savings and penalties for SLA violation
 
-A more advanced version will be also to have less SLAs violations or to have penalties that do not exceed the gain of reducing the energy cost. Basically, you focus on maximizing the revenues.
+## Evaluation criteria
 
+- quality of each scheduler
+- quality of each observer
+- code clarity
+- the justification for each scheduling algorithm (_why such an algorithm ?_), especially the energy-aware ones.
 
+Furthermore, bonus points will be granted to the 3 projects having
 
+- the energy-aware static schedulers providing the highest savings
+- the energy-aware dynamic schedulers providing the highest savings
+- the energy-aware schedulers (static or dynamic) leading to the highest revenues.
 
 
