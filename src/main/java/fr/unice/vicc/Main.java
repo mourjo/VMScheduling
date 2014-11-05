@@ -27,6 +27,8 @@ public class Main {
 
     private static VmAllocationPolicyFactory policies = new VmAllocationPolicyFactory();
 
+    private static Observers observers = new Observers();
+
     private static Revenue simulateDay(String d, String impl) throws Exception {
 
         File input = new File(WORKLOAD + "/" +  d);
@@ -40,7 +42,7 @@ public class Main {
         DatacenterBroker broker = new PowerDatacenterBroker("Broker");
 
         //The applications to run, on their Vms
-        List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), input.getName());
+        List<Cloudlet> cloudlets = Helper.createCloudletListPlanetLab(broker.getId(), input.getPath());
         List<Vm> vms = Helper.createVmList(broker.getId(), cloudlets);
         broker.submitVmList(vms);
         broker.submitCloudletList(cloudlets);
@@ -56,7 +58,11 @@ public class Main {
 
         prepareLogging(d);
         CloudSim.terminateSimulation(Constants.SIMULATION_LIMIT);
+
+        //Here you can insert your observers
         PeakPowerObserver peakPowerObserver = new PeakPowerObserver(hosts);
+        observers.build();
+
         CloudSim.startSimulation();
 
         List<Cloudlet> newList = broker.getCloudletReceivedList();
