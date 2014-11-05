@@ -9,7 +9,8 @@ Some usefull resources:
 - CloudSim [FAQ](https://code.google.com/p/cloudsim/wiki/FAQ#Policies_and_algorithms)
 - CloudSim [API](http://www.cloudbus.org/cloudsim/doc/api/index.html)
 - CloudSim [source code](cloudsim-3.0.3-src.tar.gz)
-
+- CloudSim [mailing-list](https://groups.google.com/forum/#!forum/cloudsim)
+- 
 ## Setting up the environment
 
 You must have a working Java 7 + maven environment to develop and Git to manage the sources. No IDE is necessary but feel free to use it.
