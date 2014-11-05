@@ -102,9 +102,25 @@ Your scheduler is effective when you can succesfully simulates all the days, wit
 
 Develop a scheduler (`statEnergy` flag) that reduces the overall energy consumption without relying on Vm migration. The resulting simulation must consumes less energy than all the previous schedulers.
 
-#### dynamic version
+#### dynamic version (bonus)
 
-Copy the previous scheduler and modify it to rely on Vm migration to continuously improve the Vm placement (`dynEnergy` flag). The resulting simulation must consumes less energy than the static version
+Copy the previous scheduler and modify it to rely on Vm migration to continuously improve the Vm placement (`dynEnergy` flag). The resulting simulation must consumes less energy than the static version.
+
+To indicate which Vm to migrate to which host, implement the method `optimizeAllocation`. The returned list is the sequence of migration to perform. Each list entry is a map that only contains the Vm to migrate (key `vm`) and the destination host (key `host`). For example:
+
+```java
+public List<Map<String,Object>> optimizeAllocation(List<Vm> vms) {
+	List <Map<String,Object> map = new ArrayList<>();
+	Map<String,Object> m1 = new HashMap<>();
+	m1.put("vm", vms.get(0));
+	m1.put("host", getHostList().get(0));
+	map.add(m1);
+	Map<String,Object> m2 = ...
+	...
+	return map;
+}
+```
+
 
 ### Greedy scheduler
 
