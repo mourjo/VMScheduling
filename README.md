@@ -13,7 +13,7 @@ Some usefull resources:
 - 
 ## Setting up the environment
 
-You must have a working Java 7 + maven environment to develop and Git to manage the sources. No IDE is necessary but feel free to use it.
+You must have a working Java 7 + [maven](http://maven.apache.org) environment to develop and Git to manage the sources. No IDE is necessary but feel free to use it.
 
 1. clone this repository. The project directory is organized as follow:
 ```sh
@@ -21,6 +21,7 @@ $ tree
  |- src #the source code
  |- repository #external dependencies
  |- planetlab #the workload to process
+ |-cloudsim-3.0.3-src.tar.gz # simulator sources
  \- pom.xml # maven project descriptor
 ```
 2. check everything is working by typing `mvn install` in the root directory
