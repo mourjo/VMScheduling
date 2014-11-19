@@ -29,7 +29,7 @@ $ tree
 
 ## How to test
 
-`fr.unice.vicc.Main` is the entry point. It can be launch from your IDE or using the command `mvn exec:java`.
+`fr.unice.vicc.Main` is the entry point. It can be launch from your IDE or using the command `mvn compile exec:java`.
 
 ```sh
 Usage: Main scheduler [day]
@@ -43,8 +43,8 @@ By default, the output is written in a log file in the `logs` folder.
 If you execute the program through `mvn exec:java`, then the arguments are provided using the 'sched' and the 'day' properties.
 
 - To execute the simulator using the `naive` scheduler and all the days:
-`mvn exec:java -Dsched=naive -Dday=all`
-- to replay only day `20110303`: `mvn exec:java -Dsched=naive -Dday=20110303`
+`mvn compile exec:java -Dsched=naive -Dday=all`
+- to replay only day `20110303`: `mvn compile exec:java -Dsched=naive -Dday=20110303`
 
 
 
