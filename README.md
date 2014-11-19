@@ -58,7 +58,7 @@ To integrate your schedulers within the codebase, you will have to declare your 
 
 This first scheduler aims only at discovering the CloudSim API. This scheduler simply places each `Vm` to the first `Host` with enough free capacity.
 
-1. Just create the new class handling the scheduling, integrate it into `VmAllocationPolicyFactory`. The flag to call this scheduler for the command line interface (CLI) will be "naive". Test if the integration is correct. The code shall crash in your class but that is expected at this stage.
+1. Just create the new class handling the scheduling, integrate it into `VmAllocationPolicyFactory`. Your class must extends `VmAllocationPolicy`. The flag to call this scheduler for the command line interface (CLI) will be "naive". Test if the integration is correct. The code shall crash in your class but that is expected at this stage.
 2. Implements the easy part first, that is to indicate where a Vm runs. This is done by the `getHost(Vm)` and the `getHost(int, int)` methods
 
 3. Implements `allocateHostForVm`, the method to force a given `Vm` to be hosted on a given `Host`. For doing so, look at the method `Host.vmCreate(Vm)`.
