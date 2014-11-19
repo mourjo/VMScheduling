@@ -61,7 +61,7 @@ This first scheduler aims only at discovering the CloudSim API. This scheduler s
 1. Just create the new class handling the scheduling, integrate it into `VmAllocationPolicyFactory`. Your class must extends `VmAllocationPolicy`. The flag to call this scheduler for the command line interface (CLI) will be "naive". Test if the integration is correct. The code shall crash in your class but that is expected at this stage.
 2. Implements the easy part first, that is to indicate where a Vm runs. This is done by the `getHost(Vm)` and the `getHost(int, int)` methods
 
-3. Implements `allocateHostForVm`, the method to force a given `Vm` to be hosted on a given `Host`. For doing so, look at the method `Host.vmCreate(Vm)`.
+3. Implements `allocateHostForVm`, the method to force a given `Vm` to be hosted on a given `Host`. For doing so, look at the method `Host.vmCreate(Vm)`. The method `getHostList` from `VmAllocationPolicy` allows to get the datacenter nodes
 
 4. Implements `deallocateHostForVm`, the method that remove a running `Vm` from its hosting node.
 
