@@ -91,4 +91,8 @@ public class PeakPowerObserver extends SimEntity {
         send(this.getId(), delay, OBSERVE, null);
     }
 
+    @Override
+    public int getId() {
+        return OBSERVE;
+    }
 }
