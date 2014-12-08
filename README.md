@@ -124,6 +124,6 @@ public List<Map<String,Object>> optimizeAllocation(List<Vm> vms) {
 ```
 
 
-### Greedy scheduler
+### Greedy scheduler (bonus)
 
 Develop a scheduler that maximizes revenues. It is then important to provide a good tradeoff between energy savings and penalties for SLA violation.
