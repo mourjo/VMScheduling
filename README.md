@@ -79,7 +79,7 @@ Let consider the VMs run replicated applications. To make them fault-tolerant to
 
 1. Implement a new scheduler (flag `antiAffinity`) that place the Vms with regards to their affinity. In practice, all Vms with an id between [0-99] must be on distinct nodes, the same with Vms having an id between [100-199], [200-299], ... .
 
-2. To check the scheduler is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to confirm Vms of a same group are hosted on distinct nodes. If this constraint is violated, then the observer must reports the co-located Vms. If needed, modify your scheduler or use the naive one to exhibit the correctness of the observer.
+2. To check the scheduler is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to confirm Vms of a same group are hosted on distinct nodes. If this constraint is violated, then the observer must reports the co-located Vms. If needed, modify your scheduler or use the naive one to exhibit the correctness of the observer. The core method to implement is the `processEvent` method. Aside `startEntity` must be implemented as well to bootstrap the observation loop.
 
 ### Balance the load
 

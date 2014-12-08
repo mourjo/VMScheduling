@@ -35,9 +35,21 @@ public class NaiveVmAllocationPolicy extends VmAllocationPolicy {
         if (host.vmCreate(vm)) {
             //the host is appropriate, we track it
             vmTable.put(vm.getUid(), host);
+            return true;
         }
         return false;
+    }
 
+    public boolean allocateHostForVm(Vm vm) {
+        //First fit algorithm, run on the first suitable node
+        for (Host h : getHostList()) {
+            if (h.vmCreate(vm)) {
+                //track the host
+                vmTable.put(vm.getUid(), h);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void deallocateHostForVm(Vm vm,Host host) {
@@ -45,26 +57,14 @@ public class NaiveVmAllocationPolicy extends VmAllocationPolicy {
         host.vmDestroy(vm);
     }
 
-    public static Object optimizeAllocation() {
-        return null;
-    }
-
-    public boolean allocateHostForVm(Vm vm) {
-            //First fit algorithm, run on the first suitable node
-            for (Host h : getHostList()) {
-                if (h.vmCreate(vm)) {
-                    //track the host
-                    vmTable.put(vm.getUid(), h);
-                    return true;
-                }
-            }
-            return false;
-    }
-
     @Override
     public void deallocateHostForVm(Vm v) {
         //get the host and remove the vm
         vmTable.get(v.getUid()).vmDestroy(v);
+    }
+
+    public static Object optimizeAllocation() {
+        return null;
     }
 
     @Override
