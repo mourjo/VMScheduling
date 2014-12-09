@@ -85,7 +85,7 @@ Let consider the VMs run replicated applications. To make them fault-tolerant to
 
 Balancing the load is usefull to avoid to alter specific hosts prematurely. It is also convenient to minimize the probabilities of saturating a host.
 
-1. Develop a scheduler that perform load balancing (`balance` load) with regards to the mips usage.
+1. Develop a scheduler that perform load balancing (`balance` load) with regards to the mips available on each host.
 2. Develop an observer to evaluate every second the balancing rate. The balancing ratio must be logged for observations.
 
 ### Get rid of SLA violations
