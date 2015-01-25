@@ -77,16 +77,21 @@ This first scheduler aims only at discovering the CloudSim API. This scheduler s
 
 Let consider the VMs run replicated applications. To make them fault-tolerant to hardware failure, the customer expects to have the replicas running on distinct hosts.
 
-1. Implement a new scheduler (flag `antiAffinity`) that place the Vms with regards to their affinity. In practice, all Vms with an id between [0-99] must be on distinct nodes, the same with Vms having an id between [100-199], [200-299], ... .
+1. Implement a new scheduler (`antiAffinity` flag) that place the Vms with regards to their affinity. In practice, all Vms with an id between [0-99] must be on distinct nodes, the same with Vms having an id between [100-199], [200-299], ... .
 
-2. To check the scheduler is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to confirm Vms of a same group are hosted on distinct nodes. If this constraint is violated, then the observer must reports the co-located Vms. If needed, modify your scheduler or use the naive one to exhibit the correctness of the observer. The core method to implement is the `processEvent` method. Aside `startEntity` must be implemented as well to bootstrap the observation loop.
+2. What is the temporal complexity of the algorithm ?
+
+3. What is the impact of such an algorithm over the cluster hosting capacity ?
 
 ### Balance the load
 
 Balancing the load is usefull to avoid to alter specific hosts prematurely. It is also convenient to minimize the probabilities of saturating a host.
 
-1. Develop a scheduler that perform load balancing (`balance` load) with regards to the mips available on each host.
-2. Develop an observer to evaluate every second the balancing rate. The balancing ratio must be logged for observations.
+1. Develop a scheduler that perform load balancing (`balance` flag) with regards to the mips available on each host. You should observe fewer penalties with regards to the naive scheduler.
+
+2. To check the balancing is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to estimate the balancing. The core method to implement is the `processEvent` method. Aside `startEntity` must be implemented as well to bootstrap the observation loop. Establish a metric to describe the balancing, justify you choice, and observe its variation depending on the underlying scheduler.
+
+3. What is the temporal complexity of the algorithm ?
 
 ### Get rid of SLA violations
 
@@ -94,9 +99,9 @@ For a practical understanding of what a SLA violation is in this project, look a
 
 If the SLA is not met then the provider must pay penalties to the client. It is then not desirable to have violations to attract customers and maximize the revenues.
 
-Implement a scheduler that ensures there can be no SLA violation (`noViolations` flag). In practice, the scheduler must chose for each Vm, a host with enough free processing unit to support the peak demand in terms of MIPS. 
+1. Implement a scheduler that ensures there can be no SLA violation (`noViolations` flag). Remember the natuve of the hypervisor. Your scheduler is effective when you can succesfully simulates all the days, with the `Revenue` class reporting no refundings due to SLA violation.
 
-Your scheduler is effective when you can succesfully simulates all the days, with the `Revenue` class reporting no refundings due to SLA violation.
+2. Justify your approach to solve SLA violations. What is the temporal complexity of the algorithm ?
 
 ### Energy-efficient schedulers
 
@@ -104,11 +109,13 @@ Your scheduler is effective when you can succesfully simulates all the days, wit
 
 Develop a scheduler (`statEnergy` flag) that reduces the overall energy consumption without relying on Vm migration. The resulting simulation must consumes less energy than all the previous schedulers.
 
+What is the temporal complexity of the algorithm ?
+
 #### dynamic version (bonus)
 
-Copy the previous scheduler and modify it to rely on Vm migration to continuously improve the Vm placement (`dynEnergy` flag). The resulting simulation must consumes less energy than the static version.
+Copy the previous scheduler and modify it to rely on Vm migration to continuously improve the Vm placement (`dynEnergy` flag). The resulting simulation must consumes less energy than the static version (even if there is more violations).
 
-To indicate which Vm to migrate to which host, implement the method `optimizeAllocation`. The returned list is the sequence of migration to perform. Each list entry is a map that only contains the Vm to migrate (key `vm`) and the destination host (key `host`). For example:
+To indicate which Vm to migrate to which host, implement `optimizeAllocation()`. The returned list is the sequence of migrations to perform. Each entry is a map that only contains the Vm to migrate (key `vm`) and the destination host (key `host`). For example:
 
 ```java
 public List<Map<String,Object>> optimizeAllocation(List<Vm> vms) {
@@ -123,7 +130,6 @@ public List<Map<String,Object>> optimizeAllocation(List<Vm> vms) {
 }
 ```
 
-
 ### Greedy scheduler (bonus)
 
-Develop a scheduler that maximizes revenues. It is then important to provide a good tradeoff between energy savings and penalties for SLA violation.
+Develop a scheduler that maximizes revenues. It is then important to provide a good tradeoff between energy savings and penalties for SLA violation. Justify your choices and the theoretical complexity of the algorithm
