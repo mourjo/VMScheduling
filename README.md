@@ -87,11 +87,9 @@ Let consider the VMs run replicated applications. To make them fault-tolerant to
 
 Balancing the load is usefull to avoid to alter specific hosts prematurely. It is also convenient to minimize the probabilities of saturating a host.
 
-1. Develop a scheduler that perform load balancing (`balance` flag) with regards to the mips available on each host. You should observe fewer penalties with regards to the naive scheduler.
+1. Develop a scheduler that perform load balancing (`balance` flag) with regards to the mips available on each host. You should observe fewer penalties with regards to the naive scheduler. What is the temporal complexity of the algorithm ?
 
 2. To check the balancing is effective, implements an observer. A sample one is `PeakPowerObserver`. Basically, your observer must be called every simulated second to estimate the balancing. The core method to implement is the `processEvent` method. Aside `startEntity` must be implemented as well to bootstrap the observation loop. Establish a metric to describe the balancing, justify you choice, and observe its variation depending on the underlying scheduler.
-
-3. What is the temporal complexity of the algorithm ?
 
 ### Get rid of SLA violations
 
@@ -99,9 +97,7 @@ For a practical understanding of what a SLA violation is in this project, look a
 
 If the SLA is not met then the provider must pay penalties to the client. It is then not desirable to have violations to attract customers and maximize the revenues.
 
-1. Implement a scheduler that ensures there can be no SLA violation (`noViolations` flag). Remember the natuve of the hypervisor. Your scheduler is effective when you can succesfully simulates all the days, with the `Revenue` class reporting no refundings due to SLA violation.
-
-2. Justify your approach to solve SLA violations. What is the temporal complexity of the algorithm ?
+1. Implement a scheduler that ensures there can be no SLA violation (`noViolations` flag). Remember the natuve of the hypervisor. Your scheduler is effective when you can succesfully simulates all the days, with the `Revenue` class reporting no refundings due to SLA violation. What is the temporal complexity of the algorithm ?
 
 ### Energy-efficient schedulers
 
