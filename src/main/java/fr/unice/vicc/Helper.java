@@ -437,9 +437,10 @@ public class Helper {
         long outputSize = 300;
         UtilizationModel utilizationModelNull = new UtilizationModelNull();
 
-        File inputFolder = new File(inputFolderName);
-        File[] files = inputFolder.listFiles();
-        for (int i = 0; i < files.length; i++) {
+		File [] files = new File(inputFolderName).listFiles();
+		Arrays.sort(files);
+
+		for (int i = 0; i < files.length; i++) {
             Cloudlet cloudlet = null;
             try {
                 cloudlet = new Cloudlet(
