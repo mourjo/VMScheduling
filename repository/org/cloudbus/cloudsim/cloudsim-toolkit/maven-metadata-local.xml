@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.cloudbus.cloudsim</groupId>
+  <artifactId>cloudsim-toolkit</artifactId>
+  <versioning>
+    <release>3.0.3-fh</release>
+    <versions>
+      <version>3.0.3-fh</version>
+    </versions>
+    <lastUpdated>20141031160555</lastUpdated>
+  </versioning>
+</metadata>
