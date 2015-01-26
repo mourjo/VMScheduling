@@ -13,8 +13,6 @@ public class VmAllocationPolicyFactory {
     VmAllocationPolicy make(String id, List<PowerHost> hosts) {
         switch (id) {
             case "naive":  return new NaiveVmAllocationPolicy(hosts);
-            //case "no violation": ...
-            //
         }
         throw new IllegalArgumentException("No such policy '" + id + "'");
     }
