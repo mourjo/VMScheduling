@@ -1,14 +1,13 @@
 package fr.unice.vicc;
 
-import org.apache.commons.math3.linear.EigenDecomposition;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Fabien Hermenier
@@ -36,7 +35,9 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     public boolean allocateHostForVm(Vm vm, Host host) {
-        if (host.vmCreate(vm)) {
+    	int vmClass = vm.getId()/100;
+        if ((!affinityMap.containsKey(vmClass) || (affinityMap.containsKey(vmClass) && affinityMap.get(vmClass).contains(host))) && host.vmCreate(vm)) 
+        {
             //the host is appropriate, we track it
             vmTable.put(vm.getUid(), host);
             return true;
@@ -45,7 +46,6 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     public boolean allocateHostForVm(Vm vm) {
-        //
     	
     	int vmID = vm.getId();
     	if(affinityMap.containsKey(vmID/100))
@@ -65,7 +65,7 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     		for (Host h : getHostList()) {
                 if (h.vmCreate(vm)) {
                     //track the host
-                	List<Host> eligibleHosts = new ArrayList<Host>();
+                	List<Host> eligibleHosts = new LinkedList<Host>();
                 	eligibleHosts.addAll(getHostList());
                 	eligibleHosts.remove(h);
                 	affinityMap.put(vmID/100, eligibleHosts);
@@ -77,7 +77,8 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     	return false;
     }
 
-    public void deallocateHostForVm(Vm vm,Host host) {
+    public void deallocateHostForVm(Vm vm, Host host) {
+    	affinityMap.get(vm.getId()/100).add(host);
         vmTable.remove(vm.getUid());
         host.vmDestroy(vm);
     }
@@ -85,6 +86,7 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     @Override
     public void deallocateHostForVm(Vm v) {
         //get the host and remove the vm
+    	affinityMap.get(v.getId()/100).add(v.getHost());
         vmTable.get(v.getUid()).vmDestroy(v);
     }
 
