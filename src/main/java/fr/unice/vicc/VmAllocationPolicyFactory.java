@@ -14,6 +14,7 @@ public class VmAllocationPolicyFactory {
         switch (id) {
             case "naive":  return new NaiveVmAllocationPolicy(hosts);
             //case "no violation": ...
+            //case2
         }
         throw new IllegalArgumentException("No such policy '" + id + "'");
     }
