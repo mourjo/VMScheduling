@@ -40,14 +40,15 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
 
     public boolean allocateHostForVm(Vm vm, Host host) 
     {
-    	int vmClass = vm.getId()/100;
+    	System.out.println("called");
+    	/*int vmClass = vm.getId()/100;
         if ((!affinityMap.containsKey(vmClass) || (affinityMap.containsKey(vmClass) && affinityMap.get(vmClass).contains(host))) && host.vmCreate(vm)) 
         {
         	allocationLog(vm, host);
         	
             vmTable.put(vm.getUid(), host);
             return true;
-        }
+        }*/
         return false;
     }
 
