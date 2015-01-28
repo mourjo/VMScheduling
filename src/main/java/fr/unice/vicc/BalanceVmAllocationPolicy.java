@@ -1,12 +1,14 @@
 package fr.unice.vicc;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Vm;
+import org.cloudbus.cloudsim.VmAllocationPolicy;
 
 /**
  * @author Mourjo Sen & Rares Damaschin
@@ -41,7 +43,17 @@ public class BalanceVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     public boolean allocateHostForVm(Vm vm) {
-        //First fit algorithm, run on the first suitable node
+        
+    	//sort the hosts in descending order of available mips: O(n log n) {too performance-intensive?}
+    	Collections.sort(getHostList(), new Comparator<Host>() {
+            @Override
+            public int compare(Host h1, Host h2) {	
+            	return (int)(h2.getAvailableMips() - h1.getAvailableMips());
+            }
+        });
+    	
+    	//energy consumed increases a lot because every vm is allocated to the freest host
+    	
         for (Host h : getHostList()) {
             if (h.vmCreate(vm)) {
                 //track the host
