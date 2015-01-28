@@ -1,9 +1,5 @@
 package fr.unice.vicc;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,15 +36,30 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
 
     public boolean allocateHostForVm(Vm vm, Host host) 
     {
-    	System.out.println("called");
-    	/*int vmClass = vm.getId()/100;
-        if ((!affinityMap.containsKey(vmClass) || (affinityMap.containsKey(vmClass) && affinityMap.get(vmClass).contains(host))) && host.vmCreate(vm)) 
-        {
-        	allocationLog(vm, host);
-        	
-            vmTable.put(vm.getUid(), host);
-            return true;
-        }*/
+    	int vmClass = vm.getId()/100;
+    	if(affinityMap.containsKey(vmClass))
+    	{
+    		
+    		if (affinityMap.get(vmClass).contains(host) && host.vmCreate(vm)) 
+    		{
+				affinityMap.get(vm.getId()/100).remove(host);
+				vmTable.put(vm.getUid(), host);
+				return true;
+			}
+    	}
+    	else
+    	{
+    		if (host.vmCreate(vm)) 
+    		{
+    			List<Host> eligibleHosts = new LinkedList<Host>();
+            	eligibleHosts.addAll(getHostList());
+            	eligibleHosts.remove(host);
+            	affinityMap.put(vmClass, eligibleHosts);
+                vmTable.put(vm.getUid(), host);
+                return true;
+    		}
+    	}
+    	
         return false;
     }
 
@@ -60,11 +71,10 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     		//check all eligible hosts for the class
     		for (Host h : affinityMap.get(vmID/100)) 
     		{
-    			if (h.vmCreate(vm)) {
-    				
-    				allocationLog(vm, h);
-    				
-    				
+    			if (h.vmCreate(vm))
+    			{
+//    				another strategy is to rotate it, which has better time complexity but generates less revenue:
+//    				Collections.rotate(affinityMap.get(vmID/100), affinityMap.get(vmID/100).indexOf(h));
     				affinityMap.get(vmID/100).remove(h);
     				vmTable.put(vm.getUid(), h);
     				return true;
@@ -73,12 +83,10 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     	}
     	else
     	{
-    		for (Host h : getHostList()) {
-                if (h.vmCreate(vm)) {
-                	
-                	allocationLog(vm, h);
-                	
-                    //track the host
+    		for (Host h : getHostList()) 
+    		{
+                if (h.vmCreate(vm)) 
+                {
                 	List<Host> eligibleHosts = new LinkedList<Host>();
                 	eligibleHosts.addAll(getHostList());
                 	eligibleHosts.remove(h);
@@ -91,20 +99,16 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     	return false;
     }
 
-    public void deallocateHostForVm(Vm vm, Host host) {
-    	
-    	deallocationLog(vm, host);
-    	
+    public void deallocateHostForVm(Vm vm, Host host) 
+    {
     	affinityMap.get(vm.getId()/100).add(host);
         vmTable.remove(vm.getUid());
         host.vmDestroy(vm);
     }
 
     @Override
-    public void deallocateHostForVm(Vm v) {
-    	
-    	deallocationLog(v, v.getHost());
-    	
+    public void deallocateHostForVm(Vm v) 
+    {
         //get the host and remove the vm
     	affinityMap.get(v.getId()/100).add(v.getHost());
         vmTable.get(v.getUid()).vmDestroy(v);
@@ -119,39 +123,5 @@ public class AntiAffinityVmAllocationPolicy extends VmAllocationPolicy {
     public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> arg0) {
         //Static scheduling, no migration, return null;
         return null;
-    }
-    
-    
-    
-    private void allocationLog(Vm vm, Host host)
-    {
-    	PrintWriter outFile = null;
-    	try {
-			outFile = new PrintWriter ( new BufferedWriter ( new FileWriter ( "antiAffinityLog.txt", true )  )  ) ;
-			outFile.println(vm.getId() + " allocated to " + host.getId());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	finally
-    	{
-    		outFile.close();
-    	}
-    }
-    
-    private void deallocationLog(Vm vm, Host host)
-    {
-    	PrintWriter outFile = null;
-    	try {
-			outFile = new PrintWriter ( new BufferedWriter ( new FileWriter ( "antiAffinityLog.txt", true )  )  ) ;
-			outFile.println(vm.getId() + " deallocated from " + host.getId());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	finally
-    	{
-    		outFile.close();
-    	}
     }
 }
