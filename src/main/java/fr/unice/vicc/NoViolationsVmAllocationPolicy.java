@@ -41,13 +41,16 @@ public class NoViolationsVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     public boolean allocateHostForVm(Vm vm) {
-        //First fit algorithm, run on the first suitable node
-        for (Host h : getHostList()) {
-            if (h.vmCreate(vm)) {
-                //track the host
-                vmTable.put(vm.getUid(), h);
-                return true;
-            }
+
+    	for (Host h : getHostList()) {
+    		if((double)h.getTotalMips()/2d < h.getAvailableMips() - vm.getCurrentRequestedMaxMips())
+    		{
+	            if (h.vmCreate(vm)) {
+	                //track the host
+	                vmTable.put(vm.getUid(), h);
+	                return true;
+	            }
+    		}
         }
         return false;
     }
