@@ -1,12 +1,13 @@
 package fr.unice.vicc;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Pe;
+import org.cloudbus.cloudsim.Vm;
+import org.cloudbus.cloudsim.VmAllocationPolicy;
 
 /**
  * @author Mourjo Sen & Rares Damaschin
@@ -43,16 +44,25 @@ public class NoViolationsVmAllocationPolicy extends VmAllocationPolicy {
     public boolean allocateHostForVm(Vm vm) {
 
     	for (Host h : getHostList()) {
-    		if((double)h.getTotalMips()/2d < h.getAvailableMips() - vm.getCurrentRequestedMaxMips())
+    		boolean suitableHost = false;
+    		for(Pe processingElem : h.getPeList())
     		{
-	            if (h.vmCreate(vm)) {
-	                //track the host
-	                vmTable.put(vm.getUid(), h);
-	                return true;
-	            }
+    			if(vm.getMips() < processingElem.getPeProvisioner().getAvailableMips())
+    			{
+    				suitableHost = true;
+    				break;
+    			}
     		}
-        }
-        return false;
+
+    		if(suitableHost)
+    		{
+    			if (h.vmCreate(vm)) {
+    				vmTable.put(vm.getUid(), h);
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
 
     public void deallocateHostForVm(Vm vm,Host host) {
