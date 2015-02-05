@@ -1,15 +1,17 @@
 package fr.unice.vicc;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Set;
+
+import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Vm;
+import org.cloudbus.cloudsim.VmAllocationPolicy;
 
 /**
  * @author Mourjo Sen & Rares Damaschin
@@ -81,43 +83,42 @@ public class DynamicEnergyVmAllocationPolicy extends VmAllocationPolicy {
 
     @Override
     public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> vms) {
+    	
     	List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
     	
+    	Set<Host> lessPowerHosts = new HashSet<Host>();
+    	List<Vm> unAllocatedVMs = new ArrayList<Vm>();
+    	unAllocatedVMs.addAll(vms);
     	
+    	for(Vm v : vms)
+    		lessPowerHosts.add(v.getHost());
     	
-    	Collections.sort(getHostList(), new Comparator<Host>() {
-            @Override
-            public int compare(Host h1, Host h2) {	
-            	return (int)(h2.getAvailableMips() - h1.getAvailableMips());
-            }
-        });
+    	Set<Host> morePowerHosts = new HashSet<Host>();
+    	morePowerHosts.addAll(getHostList());
+    	morePowerHosts.removeAll(lessPowerHosts);
     	
+    	Map<Host, Double> vmAvailability = new HashMap<Host, Double>();
+    	for(Host h : morePowerHosts)
+    		vmAvailability.put(h, h.getAvailableMips());
     	
-    	for (Host h : getHostList())
+    	for(Host h : morePowerHosts)
     	{
-    		for(Vm v : h.getVmList())
+    		List<Vm> removeVMs = new ArrayList<Vm>();
+    		for(Vm v : unAllocatedVMs)
     		{
-    			for(int i = getHostList().indexOf(h) + 1; i < getHostList().size(); i++)
+    			if(vmAvailability.get(h) > v.getMips())
     			{
-    				if(getHostList().get(i).getAvailableMips() > v.getCurrentRequestedTotalMips())
-    				{
-    					Map<String, Object> m1 = new HashMap<String, Object>();
-    					m1.put("vm", v);
-    			        m1.put("host", getHostList().get(i));
-    			    	map.add(m1);
-    				}
+    				Map<String, Object> m1 = new HashMap<String, Object>();
+    				m1.put("vm", v);
+    				m1.put("host", h);
+    				map.add(m1);
+    				removeVMs.add(v);
+    				vmAvailability.put(h, vmAvailability.get(h) - v.getMips());
     			}
+    			
     		}
-    		Collections.sort(getHostList().subList(getHostList().indexOf(h)+1, getHostList().size()), new Comparator<Host>() {
-                @Override
-                public int compare(Host h1, Host h2) {	
-                	return (int)(h2.getAvailableMips() - h1.getAvailableMips());
-                }
-            });
+    		unAllocatedVMs.removeAll(removeVMs);
     	}
-    	
     	return map;
-        
-
     }
 }
