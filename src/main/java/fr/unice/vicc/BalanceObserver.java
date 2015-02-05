@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * A component connected to the simulator.
 
- * Regularly, the component is called to check the instantaneous power consumption of the datacenter.
- * @author Fabien Hermenier
+ * Regularly, the component is called to check the instantaneous load balancing of the datacenter.
+ * @author Mourjo Sen & Rares Damaschin
  */
 public class BalanceObserver extends SimEntity
 {
@@ -74,9 +74,7 @@ public class BalanceObserver extends SimEntity
     public void processEvent(SimEvent ev) {
         //I received an event
         switch(ev.getTag()) {
-            case OBSERVE: //It is my custom event
-                //I must observe the datacenter
-                
+            case OBSERVE: 
             	getStdDevMips();
             	getBalanceMetric();
                 //Observation loop, re-observe in `delay` seconds
@@ -109,10 +107,8 @@ public class BalanceObserver extends SimEntity
     public void startEntity() {
     	try
     	{
+    		//logging is done in a separate file in the classpath
 	    	pw = new PrintWriter(new BufferedWriter (new FileWriter("balanceLog.txt", false)));
-	//        Log.printLine(getName() + " is starting...");
-	        //I send to myself an event that will be processed in `delay` second by the method
-	        //`processEvent`
 	        send(this.getId(), delay, OBSERVE, null);
     	}
     	catch(IOException e)

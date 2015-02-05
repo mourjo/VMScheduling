@@ -1,15 +1,14 @@
 package fr.unice.vicc;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Vm;
+import org.cloudbus.cloudsim.VmAllocationPolicy;
 
 /**
  * @author Mourjo Sen & Rares Damaschin
@@ -47,8 +46,8 @@ public class StaticEnergyVmAllocationPolicy extends VmAllocationPolicy {
     	
     	Collections.sort(getHostList(), new Comparator<Host>() {
             @Override
-            public int compare(Host h1, Host h2) {	
-            	return (int)(h1.getAvailableMips() - h2.getAvailableMips());
+            public int compare(Host h1, Host h2) {
+        		return (int)(h1.getAvailableMips() - h2.getAvailableMips());
             }
         });
     	

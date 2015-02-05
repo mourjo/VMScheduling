@@ -4,9 +4,12 @@ import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * @author Mourjo Sen & Rares Damaschin
@@ -41,6 +44,15 @@ public class DynamicEnergyVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     public boolean allocateHostForVm(Vm vm) {
+    	
+    	Collections.sort(getHostList(), new Comparator<Host>() {
+            @Override
+            public int compare(Host h1, Host h2) {
+        		return (int)(h1.getAvailableMips() - h2.getAvailableMips());
+            }
+        });
+    	
+    	
         //First fit algorithm, run on the first suitable node
         for (Host h : getHostList()) {
             if (h.vmCreate(vm)) {
@@ -68,8 +80,44 @@ public class DynamicEnergyVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     @Override
-    public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> arg0) {
-        //Static scheduling, no migration, return null;
-        return null;
+    public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> vms) {
+    	List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
+    	
+    	
+    	
+    	Collections.sort(getHostList(), new Comparator<Host>() {
+            @Override
+            public int compare(Host h1, Host h2) {	
+            	return (int)(h2.getAvailableMips() - h1.getAvailableMips());
+            }
+        });
+    	
+    	
+    	for (Host h : getHostList())
+    	{
+    		for(Vm v : h.getVmList())
+    		{
+    			for(int i = getHostList().indexOf(h) + 1; i < getHostList().size(); i++)
+    			{
+    				if(getHostList().get(i).getAvailableMips() > v.getCurrentRequestedTotalMips())
+    				{
+    					Map<String, Object> m1 = new HashMap<String, Object>();
+    					m1.put("vm", v);
+    			        m1.put("host", getHostList().get(i));
+    			    	map.add(m1);
+    				}
+    			}
+    		}
+    		Collections.sort(getHostList().subList(getHostList().indexOf(h)+1, getHostList().size()), new Comparator<Host>() {
+                @Override
+                public int compare(Host h1, Host h2) {	
+                	return (int)(h2.getAvailableMips() - h1.getAvailableMips());
+                }
+            });
+    	}
+    	
+    	return map;
+        
+
     }
 }
