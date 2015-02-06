@@ -19,10 +19,15 @@ What is the impact of such an algorithm over the cluster hosting cap
 If the VMs are well-distributed over the VM classes, then this strategy acts as a load balancer, thus starting up many hosts, atleast as many as the largest class.
 
 Summary of results
+
 - Incomes:    12398.59
+
 - Penalties:  200.95
+
 - Energy:     2688.44
+
 - Revenue:    9509.21
+
 
 
 ### Load balancing scheduler (balance flag)
@@ -34,10 +39,15 @@ We implemented a BalanceObserver based on the following metric. We used the stan
 By default the observer is not called (commented) in Observers.java. It saves the logs in a separate file in the classpath.
 
 Summary of results
+
 - Incomes:    12398.59
+
 - Penalties:  6.06
+
 - Energy:     3266.29
+
 - Revenue:    9126.24
+
 
 
 ### No SLA Violations scheduler (noViolations flag)
@@ -46,10 +56,15 @@ We allocate a VM to a host if it has a processing element with enough available 
 Time Complexity: O (n*m), where n = Number of hosts, m = Number of PEs per host
 
 Summary of results
+
 - Incomes:    12398.59
+
 - Penalties:  0.00
+
 - Energy:     2868.74
+
 - Revenue:    9529.85
+
 
 
 ### Static energy efficient scheduler (statEnergy flag)
@@ -59,10 +74,15 @@ We also tried sorting hosts in increasing order of maximum PE (per host) availab
 Time Complexity: O(n log(n)), n = Number of hosts
 
 Summary of results
+
 - Incomes:    12398.59
+
 - Penalties:  1413.50
+
 - Energy:     2604.30
+
 - Revenue:    8380.79
+
 
 ### Dynamic energy efficient scheduler (dynEnergy flag)
 Allocation of VMs is same as static energy scheduler. 
@@ -72,10 +92,15 @@ Time Complexity for migration: O(n*k) where n = Number of hosts, k = Number of V
 Because migrations are being done, the total running time for the scheduler is long, but we profiled our migration function, and it is ~10 ms mostly per invocation.
 
 Summary of results
+
 - Incomes:    12398.59
+
 - Penalties:  6312.94
+
 - Energy:     2330.08
+
 - Revenue:    3755.58
+
 
 
 ### Greedy scheduler (greedy flag)
@@ -87,7 +112,11 @@ Migration:
 	We tried a lot of strategies for migration, but it was never cost effective. So no migrations were performed.
 
 Summary of results
+
 - Incomes:    12398.59
+
 - Penalties:  7.24
+
 - Energy:     2754.93
+
 - Revenue:    9636.42
