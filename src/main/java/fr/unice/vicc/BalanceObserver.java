@@ -52,12 +52,13 @@ public class BalanceObserver extends SimEntity
         stddev = 0;
 
         for (PowerHost h : hosts) {
-            mean += h.getUtilizationMips() / h.getTotalMips();
+            mean += (h.getTotalMips() - h.getAvailableMips()) / h.getTotalMips();
         }
         mean = mean/(double)hosts.size();
         
         for (PowerHost h : hosts) {
-            stddev += ((h.getUtilizationMips() / h.getTotalMips() - mean) * (h.getUtilizationMips() / h.getTotalMips() - mean)); 
+            stddev += (((h.getTotalMips() - h.getAvailableMips()) / h.getTotalMips() - mean) 
+            			* ((h.getTotalMips() - h.getAvailableMips()) / h.getTotalMips() - mean)); 
         }
         stddev /= (double)hosts.size();
         
@@ -87,13 +88,9 @@ public class BalanceObserver extends SimEntity
      * @return a number of Watts
      */
     public double getBalanceMetric() {
-    	
-			
-		
     	pw.println(stddev);
     	if(Math.random() < 0.1)
 	    pw.flush();
-		
         return stddev;
     }
 

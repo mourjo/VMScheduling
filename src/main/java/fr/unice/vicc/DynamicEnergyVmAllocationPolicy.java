@@ -55,7 +55,6 @@ public class DynamicEnergyVmAllocationPolicy extends VmAllocationPolicy {
         });
     	
     	
-        //First fit algorithm, run on the first suitable node
         for (Host h : getHostList()) {
             if (h.vmCreate(vm)) {
                 //track the host
@@ -86,27 +85,26 @@ public class DynamicEnergyVmAllocationPolicy extends VmAllocationPolicy {
     	
     	List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
     	
-    	Set<Host> lessPowerHosts = new HashSet<Host>();
+    	Set<Host> morePowerfulHosts = new HashSet<Host>();
     	List<Vm> unAllocatedVMs = new ArrayList<Vm>();
     	unAllocatedVMs.addAll(vms);
     	
     	for(Vm v : vms)
-    		lessPowerHosts.add(v.getHost());
+    		morePowerfulHosts.add(v.getHost());
     	
-    	Set<Host> morePowerHosts = new HashSet<Host>();
-    	morePowerHosts.addAll(getHostList());
-    	morePowerHosts.removeAll(lessPowerHosts);
+    	Set<Host> lessPowerfulHosts = new HashSet<Host>();
+    	lessPowerfulHosts.addAll(getHostList());
+    	lessPowerfulHosts.removeAll(morePowerfulHosts);
     	
     	Map<Host, Double> hostAvailableMips = new HashMap<Host, Double>();
-    	for(Host h : morePowerHosts)
+    	for(Host h : lessPowerfulHosts)
     		hostAvailableMips.put(h, h.getAvailableMips());
     	
-    	for(Host h : morePowerHosts)
+    	for(Host h : lessPowerfulHosts)
     	{
     		List<Vm> removeVMs = new ArrayList<Vm>();
     		for(Vm v : unAllocatedVMs)
     		{
-//    			there are a lot of violations. Should we look at PEs before migrating? Or should we do that in greedy?
     			if(hostAvailableMips.get(h) > v.getMips())
     			{
     				Map<String, Object> m1 = new HashMap<String, Object>();

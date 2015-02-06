@@ -1,15 +1,15 @@
 package fr.unice.vicc;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Pe;
+import org.cloudbus.cloudsim.Vm;
+import org.cloudbus.cloudsim.VmAllocationPolicy;
 
 /**
  * @author Mourjo Sen & Rares Damaschin
@@ -49,17 +49,16 @@ public class GreedyVmAllocationPolicy extends VmAllocationPolicy {
             @Override
             public int compare(Host h1, Host h2) {
         		return (int)(h1.getAvailableMips() - h2.getAvailableMips());
+        		//available mips sorts according to their power model as well, we checked.
             }
         });
 
-//    	System.out.println(vm.getMips());
     	
     	for (Host h : getHostList()) {
     		
     		boolean suitableHost = false;
     		for(Pe processingElem : h.getPeList())
     		{
-//    			System.out.println(processingElem.getPeProvisioner().getMips());
     			if(vm.getMips() - 500d < processingElem.getPeProvisioner().getAvailableMips())
     			{
     				suitableHost = true;
@@ -94,8 +93,10 @@ public class GreedyVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     @Override
-    public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> arg0) {
-        //Static scheduling, no migration, return null;
-        return null;
+    public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> vms) {
+    	/*
+    	 * MIGRATIONS are costly! :\
+    	 * */
+    	return null;
     }
 }

@@ -52,7 +52,6 @@ public class StaticEnergyVmAllocationPolicy extends VmAllocationPolicy {
         });
     	
     	
-        //First fit algorithm, run on the first suitable node
         for (Host h : getHostList()) {
             if (h.vmCreate(vm)) {
                 //track the host
