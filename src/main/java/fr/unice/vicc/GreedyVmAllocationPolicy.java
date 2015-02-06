@@ -1,9 +1,12 @@
 package fr.unice.vicc;
 
 import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,15 +44,38 @@ public class GreedyVmAllocationPolicy extends VmAllocationPolicy {
     }
 
     public boolean allocateHostForVm(Vm vm) {
-        //First fit algorithm, run on the first suitable node
-        for (Host h : getHostList()) {
-            if (h.vmCreate(vm)) {
-                //track the host
-                vmTable.put(vm.getUid(), h);
-                return true;
+    	
+    	Collections.sort(getHostList(), new Comparator<Host>() {
+            @Override
+            public int compare(Host h1, Host h2) {
+        		return (int)(h1.getAvailableMips() - h2.getAvailableMips());
             }
-        }
-        return false;
+        });
+
+//    	System.out.println(vm.getMips());
+    	
+    	for (Host h : getHostList()) {
+    		
+    		boolean suitableHost = false;
+    		for(Pe processingElem : h.getPeList())
+    		{
+//    			System.out.println(processingElem.getPeProvisioner().getMips());
+    			if(vm.getMips() - 500d < processingElem.getPeProvisioner().getAvailableMips())
+    			{
+    				suitableHost = true;
+    				break;
+    			}
+    		}
+
+    		if(suitableHost)
+    		{
+    			if (h.vmCreate(vm)) {
+    				vmTable.put(vm.getUid(), h);
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
 
     public void deallocateHostForVm(Vm vm,Host host) {
