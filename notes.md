@@ -109,6 +109,7 @@ Allocation:
 We first sort the hosts in increasing order of available MIPS, same as the static energy scheduler. Then we use the same strategy as for the no SLA violations scheduler, with a margin of 500 MIPS. This allows a few SLA violations but saves a lot of energy, maximizing revenue.
 
 Time Complexity: O(n log(n)), n = Number of hosts. Assuming number of PEs in a host m < log(n)
+
 Migration:
 We tried a lot of strategies for migration, but it was never cost effective. So no migrations were performed.
 
