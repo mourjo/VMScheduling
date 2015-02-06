@@ -97,23 +97,24 @@ public class DynamicEnergyVmAllocationPolicy extends VmAllocationPolicy {
     	morePowerHosts.addAll(getHostList());
     	morePowerHosts.removeAll(lessPowerHosts);
     	
-    	Map<Host, Double> vmAvailability = new HashMap<Host, Double>();
+    	Map<Host, Double> hostAvailableMips = new HashMap<Host, Double>();
     	for(Host h : morePowerHosts)
-    		vmAvailability.put(h, h.getAvailableMips());
+    		hostAvailableMips.put(h, h.getAvailableMips());
     	
     	for(Host h : morePowerHosts)
     	{
     		List<Vm> removeVMs = new ArrayList<Vm>();
     		for(Vm v : unAllocatedVMs)
     		{
-    			if(vmAvailability.get(h) > v.getMips())
+//    			there are a lot of violations. Should we look at PEs before migrating? Or should we do that in greedy?
+    			if(hostAvailableMips.get(h) > v.getMips())
     			{
     				Map<String, Object> m1 = new HashMap<String, Object>();
     				m1.put("vm", v);
     				m1.put("host", h);
     				map.add(m1);
     				removeVMs.add(v);
-    				vmAvailability.put(h, vmAvailability.get(h) - v.getMips());
+    				hostAvailableMips.put(h, hostAvailableMips.get(h) - v.getMips());
     			}
     			
     		}
