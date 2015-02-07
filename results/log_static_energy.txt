@@ -1,4 +1,3 @@
-Static Energy
 Day 20110303
 Initialising...
 Incomes:    1317.67â‚¬

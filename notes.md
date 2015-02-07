@@ -11,7 +11,7 @@ Though it would've helped if the API was better documented.
 Here's what we did for each scheduler (the detailed results are in the /results folder):
 
 ### Anti-affinity scheduler (antiAffinity flag)
-We use a hash map to keep track of all hosts that do not run a VM from that class (all eligile hosts for a VM class). We got a VM's class by dividing its ID by 100.
+We use a hash map to keep track of all hosts that do not run a VM from a class (ie, one map entry = all eligible hosts for a VM class). We got a VM's class by dividing its ID by 100.
 
 Time complexity of allocation: O(1) per allocation
 
@@ -51,7 +51,7 @@ Summary of results
 
 
 ### No SLA Violations scheduler (noViolations flag)
-We allocate a VM to a host if it has a processing element with enough available MIPS to run the VM. This ensures a zero penalty accross all days.
+We allocate a VM to a host if it has a processing element with enough available MIPS to run the VM. This ensures a zero penalty across all days.
 
 Time Complexity: O (n*m), where n = Number of hosts, m = Number of PEs per host
 
@@ -68,7 +68,7 @@ Summary of results
 
 
 ### Static energy efficient scheduler (statEnergy flag)
-We sort the hosts according to increasing order of availabile MIPS. Therefore we try to allocate VMs to the least available hosts first. By using getAvailableMips() we also sort the hosts by lower power model first, which is why we did not implement the sorting by power model.
+We sort the hosts according to increasing order of available MIPS. Therefore we try to allocate VMs to the least available hosts first. By using getAvailableMips() we also sort the hosts by lower power model first, which is why we did not implement the sorting by power model.
 We also tried sorting hosts in increasing order of maximum PE (per host) available MIPS, but this had a slightly worse result, so we did not keep it.
 
 Time Complexity: O(n log(n)), n = Number of hosts
