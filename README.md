@@ -4,6 +4,14 @@ This project aims at developing different Vm schedulers for a given IaaS cloud. 
 
 The implementation was made over the IaaS cloud simulator [CloudSim](http://www.cloudbus.org/cloudsim/). The simulator replays a workload extracted from Emulab, on a datacenter having realistic characteristics. 
 
+
+## Dev team
+
+- Rares Damaschin: damaschinrares@gmail.com
+- Mourjo Sen: sen.mourjo@etu.unice.fr
+- With help from Dr Fabien Hermenier: https://github.com/fhermeni
+
+
 Some useful resources:
 
 - CloudSim [FAQ](https://code.google.com/p/cloudsim/wiki/FAQ#Policies_and_algorithms)
@@ -45,11 +53,6 @@ If you execute the program through `mvn exec:java`, then the arguments are provi
 - To execute the simulator using the `naive` scheduler and all the days:
 `mvn compile exec:java -Dsched=naive -Dday=all`
 - to replay only day `20110303`: `mvn compile exec:java -Dsched=naive -Dday=20110303`
-
-## Dev team
-
-- Rares Damaschin: damaschinrares@gmail.com
-- Mourjo Sen: sen.mourjo@etu.unice.fr
 
 ## Project Tasks
 
