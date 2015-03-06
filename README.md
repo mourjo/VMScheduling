@@ -115,7 +115,8 @@ This scheduler that ensures there are no SLA violations (see results).
 
 We allocate a VM to a host if it has a processing element with enough available MIPS to run the VM. This ensures a zero penalty across all days.
 
-Time Complexity per allocation: `O (n*m)`, where n = Number of hosts, m = Number of PEs per host
+Time Complexity per allocation: `O (n*m)`, where n = Number of hosts, m = Number of PEs* per host
+*PE = Processing element (cores in a CPU)
 
 ##### Summary of results
 
@@ -132,7 +133,8 @@ Time Complexity per allocation: `O (n*m)`, where n = Number of hosts, m = Number
 This scheduler reduces the overall energy consumption without relying on VM migrations. The resulting simulation consumes less energy than all the previous schedulers.
 
 We sort the hosts according to increasing order of available MIPS. Therefore we try to allocate VMs to the least available hosts first. By using `getAvailableMips()` we also sort the hosts by lower power model first, which is why we did not implement the sorting by power model.
-We also tried sorting hosts in increasing order of maximum PE (per host) available MIPS, but this had a slightly worse result, so we did not keep it.
+We also tried sorting hosts in increasing order of maximum PE* (per host) available MIPS, but this had a slightly worse result, so we did not keep it.
+*PE = Processing element (cores in a CPU)
 
 Time Complexity per allocation: `O(n log(n))`, n = Number of hosts
 
