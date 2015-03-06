@@ -5,7 +5,7 @@ Though it would've helped if the API was better documented.
 ## The team
 
 - Rares Damaschin: damaschinrares@gmail.com
-- Mourjo Sen: sen.mourjo@gmail.com
+- Mourjo Sen: sen.mourjo@etu.unice.fr
 
 ## Comments
 Here's what we did for each scheduler (the detailed results are in the /results folder):
