@@ -46,7 +46,7 @@ If you execute the program through `mvn exec:java`, then the arguments are provi
 `mvn compile exec:java -Dsched=naive -Dday=all`
 - to replay only day `20110303`: `mvn compile exec:java -Dsched=naive -Dday=20110303`
 
-## The team
+## Dev team
 
 - Rares Damaschin: damaschinrares@gmail.com
 - Mourjo Sen: sen.mourjo@etu.unice.fr
