@@ -15,7 +15,7 @@ Some useful resources:
 
 Requires Java 7 + [maven](http://maven.apache.org) environment to develop.
 
-1. clone this repository. The project directory is organized as follow:
+First, clone this repository. The project directory is organized as follows:
 ```sh
 $ tree
  |- src #the source code
@@ -24,8 +24,8 @@ $ tree
  |-cloudsim-3.0.3-src.tar.gz # simulator sources
  \- pom.xml # maven project descriptor
 ```
-2. check everything is working by typing `mvn install` in the root directory
-3. Integrate the project with your IDE if needed
+Second, check everything is working by typing `mvn install` in the root directory
+Third, Integrate the project with your IDE if needed
 
 ## How to test
 
@@ -70,17 +70,17 @@ This scheduler (`antiAffinity` flag) places the Vms with regard to their affinit
 
 We use a hash map to keep track of all hosts that do not run a VM from a class (ie, one map entry = all eligible hosts for a VM class). We got a VM's class by dividing its ID by 100.
 
-Time complexity of allocation per allocation: O(q), q = Number of eligible hosts for a VM class 
+Time complexity of allocation per allocation: `O(q)`, q = Number of eligible hosts for a VM class 
 
 #### What is the impact of such an algorithm over the cluster hosting capacity?
 If the VMs are well-distributed over the VM classes, then this strategy acts as a load balancer, thus starting up many hosts, atleast as many as the largest class.
 
 ##### Summary of results
 
-- Incomes:    12398.59
-- Penalties:  200.95
-- Energy:     2688.44
-- Revenue:    9509.21
+- Incomes:    € 12398.59
+- Penalties:  € 200.95
+- Energy:     € 2688.44
+- Revenue:    € 9509.21
 
 ### Load balancing scheduler (`balance` flag)
 
@@ -90,17 +90,17 @@ Idea: To perform load balancing with regard to the MIPS available on each host. 
 
 We sort all hosts in decreasing order of available MIPS. Then we try to allocate VMs in that order.
 
-Time Complexity per allocation: O(n log(n)), n = Number of hosts
+Time Complexity per allocation: `O(n log(n))`, n = Number of hosts
 
 We implemented a BalanceObserver to check if the load balancing indeed works or not based on the following metric. We used the standard deviation of all hosts' percentage MIPS utilization. We used standard deviation of utilization because it shows a good variation in the load, which is what we want to measure. We used percentage utilization because different hosts have different total MIPS.
 By default the observer is not called (commented) in `Observers.java`. It saves the logs in a separate file in the classpath.
 
 ##### Summary of results
 
-- Incomes:    12398.59
-- Penalties:  6.06
-- Energy:     3266.29
-- Revenue:    9126.24
+- Incomes:    € 12398.59
+- Penalties:  € 6.06
+- Energy:     € 3266.29
+- Revenue:    € 9126.24
 
 ### No SLA Violations scheduler (`noViolations` flag)
 
@@ -112,14 +112,14 @@ This scheduler that ensures there are no SLA violations (see results).
 
 We allocate a VM to a host if it has a processing element with enough available MIPS to run the VM. This ensures a zero penalty across all days.
 
-Time Complexity per allocation: O (n*m), where n = Number of hosts, m = Number of PEs per host
+Time Complexity per allocation: `O (n*m)`, where n = Number of hosts, m = Number of PEs per host
 
-#### Summary of results
+##### Summary of results
 
-- Incomes:    12398.59
-- Penalties:  0.00
-- Energy:     2868.74
-- Revenue:    9529.85
+- Incomes:    € 12398.59
+- Penalties:  € 0.00
+- Energy:     € 2868.74
+- Revenue:    € 9529.85
 
 
 ### Energy-efficient schedulers
@@ -131,14 +131,14 @@ This scheduler reduces the overall energy consumption without relying on VM migr
 We sort the hosts according to increasing order of available MIPS. Therefore we try to allocate VMs to the least available hosts first. By using `getAvailableMips()` we also sort the hosts by lower power model first, which is why we did not implement the sorting by power model.
 We also tried sorting hosts in increasing order of maximum PE (per host) available MIPS, but this had a slightly worse result, so we did not keep it.
 
-Time Complexity per allocation: O(n log(n)), n = Number of hosts
+Time Complexity per allocation: `O(n log(n))`, n = Number of hosts
 
 ##### Summary of results
 
-- Incomes:    12398.59
-- Penalties:  1413.50
-- Energy:     2604.30
-- Revenue:    8380.79
+- Incomes:    € 12398.59
+- Penalties:  € 1413.50
+- Energy:     € 2604.30
+- Revenue:    € 8380.79
 
 #### Dynamic version (`dynEnergy` flag)
 
@@ -162,15 +162,15 @@ public List<Map<String,Object>> optimizeAllocation(List<Vm> vms) {
 Allocation of VMs is same as static energy scheduler. 
 For migration, we tried a couple of strategies, which failed. When we debugged them, we found that calling `getVmList()` on a host returns an empty list. This was very unexpected because we expected it to be a basic functionality of a Host object. Because of this we used the `vms` list passed as a parameter and observed that they were all hosted on hosts with power model Xeon3075, which is more power consuming. Thus we assumed this will always be the case and we migrated all VMs in the `vms` list to lower power consuming hosts (the other hosts). And this works, see results.
 
-Time Complexity per migration: O(n*k) where n = Number of hosts, k = Number of VMs on a host
+Time Complexity per migration: `O(n*k)` where n = Number of hosts, k = Number of VMs on a host
 Because migrations are being done, the total running time for the scheduler is long, but we profiled our migration function, and it is ~10 ms mostly per invocation.
 
 ##### Summary of results
 
-- Incomes:    12398.59
-- Penalties:  6312.94
-- Energy:     2330.08
-- Revenue:    3755.58
+- Incomes:    € 12398.59
+- Penalties:  € 6312.94
+- Energy:     € 2330.08
+- Revenue:    € 3755.58
 
 
 
@@ -181,14 +181,14 @@ This scheduler maximizes the revenue (finally!). It is important to provide a go
 #### Allocation:
 We first sort the hosts in increasing order of available MIPS, same as the static energy scheduler. Then we use the same strategy as for the no SLA violations scheduler, with a margin of 500 MIPS. This allows a few SLA violations but saves a lot of energy, maximizing revenue.
 
-Time Complexity per allocation: O(n log(n)), n = Number of hosts. Assuming number of PEs (in a host) m < log(n)
+Time Complexity per allocation: `O(n log(n))`, n = Number of hosts. Assuming number of PEs (in a host) m < log(n)
 
 #### Migration:
 We tried a lot of strategies for migration, but it was never cost effective. So no migrations were performed.
 
 ##### Summary of results
 
-- Incomes:    12398.59
-- Penalties:  7.24
-- Energy:     2754.93
-- Revenue:    9636.42
+- Incomes:    € 12398.59
+- Penalties:  € 7.24
+- Energy:     € 2754.93
+- Revenue:    € 9636.42
