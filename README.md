@@ -75,7 +75,7 @@ We use a hash map to keep track of all hosts that do not run a VM from a class (
 
 Time complexity of allocation per allocation: `O(q)`, q = Number of eligible hosts for a VM class 
 
-#### What is the impact of such an algorithm over the cluster hosting capacity?
+##### What is the impact of such an algorithm over the cluster hosting capacity?
 If the VMs are well-distributed over the VM classes, then this strategy acts as a load balancer, thus starting up many hosts, atleast as many as the largest class.
 
 ##### Summary of results
